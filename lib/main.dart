@@ -116,11 +116,14 @@ class ButtonSave extends StatelessWidget{
         )
       );
     }
-    else{                  
+    else{                        
       Main.listModel.add(model()
           .setName(name)
           .setPhone(phone));    
       state.updateState();
+      
+      TextFieldNameState.nameController.text = '';
+      TextFieldPhoneState.phoneController.text = '';
     }
   }
 }
