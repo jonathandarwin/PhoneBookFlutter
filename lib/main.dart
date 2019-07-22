@@ -46,17 +46,19 @@ class RootLayout extends StatelessWidget{
               padding: EdgeInsets.only(bottom: 15.0),
               child: ButtonSave(listViewPhone.state),
             ),
-            // TITLE PHONE BOOK
+            // TITLE PHONE BOOK            
             Container(
               padding: EdgeInsets.only(bottom: 15.0),              
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: TitlePhoneBook(),
-              ),
+              ),              
             ),
             // LIST PHONE BOOK
-            Container(
-              child: listViewPhone,
+            Expanded(
+              child: Container(
+                child: listViewPhone,
+              ),
             ),
           ],
         ),
@@ -72,10 +74,12 @@ class TextFieldName extends StatefulWidget{
 
 class TextFieldNameState extends State<TextFieldName>{
   static final nameController = TextEditingController();
+  static FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context){
     return TextField(      
+      focusNode: focusNode,
       controller: nameController,      
       decoration: InputDecoration(
         labelText: "Name"    
@@ -90,7 +94,6 @@ class TextFieldPhone extends StatefulWidget{
 }
 
 class TextFieldPhoneState extends State<TextFieldPhone>{
-
   static final phoneController = TextEditingController();
 
   @override
@@ -106,9 +109,7 @@ class TextFieldPhoneState extends State<TextFieldPhone>{
 }
 
 class ButtonSave extends StatelessWidget{    
-
   final ListViewPhoneState state;
-
   ButtonSave(this.state);
 
   @override
@@ -142,10 +143,12 @@ class ButtonSave extends StatelessWidget{
         Main.listModel.add(model()
           .setName(name)
           .setPhone(phone));    
-        state.updateState();    
+        state.updateState();            
 
         TextFieldNameState.nameController.clear();
         TextFieldPhoneState.phoneController.clear();
+
+        FocusScope.of(context).requestFocus(TextFieldNameState.focusNode);
       }
       else{
         Scaffold.of(context).showSnackBar(
@@ -185,16 +188,20 @@ class ListViewPhoneState extends State<ListViewPhone>{
 
   void updateState(){
     if(mounted){     
+      print('Mounted');
       setState(() {
         
       }); 
     }    
+    else{
+      print('Not Mounted');
+    }
   }
 
   @override
   Widget build(BuildContext context){
-    return ListView.separated(
-      scrollDirection: Axis.vertical,
+    return ListView.separated(            
+      scrollDirection: Axis.vertical,      
       shrinkWrap: true,
       separatorBuilder: (context, i) => Padding(
         padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -204,32 +211,34 @@ class ListViewPhoneState extends State<ListViewPhone>{
       ),
       itemCount: Main.listModel.length,
       itemBuilder: (context, i){        
-        return Padding(
-          padding: EdgeInsets.only(top: 10.0, bottom:10.0, right: 20.0, left: 20.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Text(Main.listModel[i].getName()),
-              ),
-              Expanded(                
-                flex: 2,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(Main.listModel[i].getPhone()),
-                )
-              ),
-              Expanded(
-                flex: 1,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () => deleteDialog(context, i),
-                    child: Icon(Icons.delete, color: Colors.red,),
-                  ),
+        return ListTile(
+          title: Padding(          
+            padding: EdgeInsets.only(top: 10.0, bottom:10.0, right: 20.0, left: 20.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Text(Main.listModel[i].getName()),
                 ),
-              )
-            ],
+                Expanded(                
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(Main.listModel[i].getPhone()),
+                  )
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () => deleteDialog(context, i),
+                      child: Icon(Icons.delete, color: Colors.red,),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },
