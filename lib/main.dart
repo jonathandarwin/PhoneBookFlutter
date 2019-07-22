@@ -67,7 +67,7 @@ class TextFieldNameState extends State<TextFieldName>{
     return TextField(      
       controller: nameController,      
       decoration: InputDecoration(
-        hintText: "Name"
+        labelText: "Name"    
       ),
     );
   }
@@ -87,8 +87,8 @@ class TextFieldPhoneState extends State<TextFieldPhone>{
     return TextField(      
       keyboardType: TextInputType.number,
       controller: phoneController,
-      decoration: InputDecoration(        
-        hintText: "Phone Number"
+      decoration: InputDecoration(     
+        labelText: "Phone Number"    
       ),
     );
   }
@@ -117,14 +117,33 @@ class ButtonSave extends StatelessWidget{
         )
       );
     }
-    else{                        
-      Main.listModel.add(model()
+    else{            
+      bool isValid = true;
+      for (int i=0; i<Main.listModel.length; i++){
+        model element = Main.listModel[i];
+        if(element.getName() == name && element.getPhone() == phone){
+          isValid = false;
+          break;
+        }
+      }
+
+      if(isValid){
+        Main.listModel.add(model()
           .setName(name)
           .setPhone(phone));    
-      state.updateState();
+        state.updateState();    
 
-      TextFieldNameState.nameController.text = '';
-      TextFieldPhoneState.phoneController.text = '';
+        TextFieldNameState.nameController.text = '';
+        TextFieldPhoneState.phoneController.text = '';
+      }
+      else{
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Data already exists!"),
+            duration: Duration(seconds: 1),
+          )
+        );
+      }         
     }
   }
 }
