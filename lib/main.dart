@@ -144,8 +144,8 @@ class ButtonSave extends StatelessWidget{
           .setPhone(phone));    
         state.updateState();    
 
-        TextFieldNameState.nameController.text = '';
-        TextFieldPhoneState.phoneController.text = '';
+        TextFieldNameState.nameController.clear();
+        TextFieldPhoneState.phoneController.clear();
       }
       else{
         Scaffold.of(context).showSnackBar(
@@ -209,18 +209,66 @@ class ListViewPhoneState extends State<ListViewPhone>{
           child: Row(
             children: <Widget>[
               Expanded(
+                flex: 2,
                 child: Text(Main.listModel[i].getName()),
               ),
               Expanded(                
+                flex: 2,
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(Main.listModel[i].getPhone()),
                 )
+              ),
+              Expanded(
+                flex: 1,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () => deleteDialog(context, i),
+                    child: Icon(Icons.delete, color: Colors.red,),
+                  ),
+                ),
               )
             ],
           ),
         );
       },
     );
+  }
+
+  void deleteDialog(BuildContext context, int i){
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text("Delete"),
+        content: Text("Are you sure want to delete '" + Main.listModel[i].getName() + "'?" ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text("Yes"),
+            onPressed: (){  
+              Navigator.pop(context);            
+              deleteData(i);
+              updateState();              
+              Scaffold.of(context)
+                .showSnackBar(
+                  SnackBar(
+                    content: Text("Delete Success"),
+                  )
+                );
+            },
+          ),
+          FlatButton(
+            child: Text("No"),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void deleteData(int i){
+    Main.listModel.removeAt(i);
   }
 }
