@@ -85,6 +85,7 @@ class TextFieldPhoneState extends State<TextFieldPhone>{
   @override
   Widget build(BuildContext context){
     return TextField(      
+      keyboardType: TextInputType.number,
       controller: phoneController,
       decoration: InputDecoration(        
         hintText: "Phone Number"
@@ -121,7 +122,7 @@ class ButtonSave extends StatelessWidget{
           .setName(name)
           .setPhone(phone));    
       state.updateState();
-      
+
       TextFieldNameState.nameController.text = '';
       TextFieldPhoneState.phoneController.text = '';
     }
