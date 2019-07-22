@@ -47,12 +47,17 @@ class RootLayout extends StatelessWidget{
               child: ButtonSave(listViewPhone.state),
             ),
             // TITLE PHONE BOOK            
-            Container(
-              padding: EdgeInsets.only(bottom: 15.0),              
+            Container(                         
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: TitlePhoneBook(),
+                child: TitlePhoneBook()
               ),              
+            ),
+            Container(
+              padding: EdgeInsets.only(bottom: 15.0),   
+              child: Divider(
+                color: Colors.grey,                
+              ),
             ),
             // LIST PHONE BOOK
             Expanded(
@@ -77,10 +82,11 @@ class TextFieldNameState extends State<TextFieldName>{
 
   @override
   Widget build(BuildContext context){
-    return TextField(            
+    return TextFormField(            
       controller: nameController,      
+      textInputAction: TextInputAction.next,      
       decoration: InputDecoration(
-        labelText: "Name"    
+        labelText: "Name"
       ),
     );
   }
@@ -93,10 +99,22 @@ class TextFieldPhone extends StatefulWidget{
 
 class TextFieldPhoneState extends State<TextFieldPhone>{
   static TextEditingController phoneController = TextEditingController();
+  FocusNode focusNode;
+
+  @override
+  void initState(){
+    focusNode = FocusNode();
+    focusNode.addListener((){
+      if(focusNode.hasFocus)
+        phoneController.clear();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context){
-    return TextField(      
+    return TextFormField(      
+      focusNode: focusNode,      
       keyboardType: TextInputType.number,
       controller: phoneController,
       decoration: InputDecoration(     
@@ -143,10 +161,8 @@ class ButtonSave extends StatelessWidget{
           .setPhone(phone));    
         state.updateState();            
 
-        TextFieldNameState.nameController.clear();
         TextFieldPhoneState.phoneController.clear();
-
-        FocusScope.of(context).requestFocus(null);
+        TextFieldNameState.nameController.clear();        
       }
       else{
         Scaffold.of(context).showSnackBar(
