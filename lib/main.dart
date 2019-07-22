@@ -36,14 +36,25 @@ class RootLayout extends StatelessWidget{
               padding: EdgeInsets.only(bottom: 15.0),
               child: TextFieldName(),
             ),
+            // INPUT PHONE
             Container(
               padding: EdgeInsets.only(bottom: 15.0),
               child: TextFieldPhone(),
             ),
+            // BUTTON SAVE
             Container(
               padding: EdgeInsets.only(bottom: 15.0),
               child: ButtonSave(listViewPhone.state),
             ),
+            // TITLE PHONE BOOK
+            Container(
+              padding: EdgeInsets.only(bottom: 15.0),              
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TitlePhoneBook(),
+              ),
+            ),
+            // LIST PHONE BOOK
             Container(
               child: listViewPhone,
             ),
@@ -145,6 +156,20 @@ class ButtonSave extends StatelessWidget{
         );
       }         
     }
+  }
+}
+
+class TitlePhoneBook extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    return Text(
+      "Phone Book",
+      style: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 20.0
+      ),
+    );
   }
 }
 
