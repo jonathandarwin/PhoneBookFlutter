@@ -73,13 +73,11 @@ class TextFieldName extends StatefulWidget{
 }
 
 class TextFieldNameState extends State<TextFieldName>{
-  static final nameController = TextEditingController();
-  static FocusNode focusNode = FocusNode();
+  static TextEditingController nameController = TextEditingController();  
 
   @override
   Widget build(BuildContext context){
-    return TextField(      
-      focusNode: focusNode,
+    return TextField(            
       controller: nameController,      
       decoration: InputDecoration(
         labelText: "Name"    
@@ -94,7 +92,7 @@ class TextFieldPhone extends StatefulWidget{
 }
 
 class TextFieldPhoneState extends State<TextFieldPhone>{
-  static final phoneController = TextEditingController();
+  static TextEditingController phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context){
@@ -148,7 +146,7 @@ class ButtonSave extends StatelessWidget{
         TextFieldNameState.nameController.clear();
         TextFieldPhoneState.phoneController.clear();
 
-        FocusScope.of(context).requestFocus(TextFieldNameState.focusNode);
+        FocusScope.of(context).requestFocus(null);
       }
       else{
         Scaffold.of(context).showSnackBar(
@@ -200,6 +198,10 @@ class ListViewPhoneState extends State<ListViewPhone>{
 
   @override
   Widget build(BuildContext context){
+    if(Main.listModel.length == 0){
+      return NoData();
+    }
+
     return ListView.separated(            
       scrollDirection: Axis.vertical,      
       shrinkWrap: true,
@@ -279,5 +281,14 @@ class ListViewPhoneState extends State<ListViewPhone>{
 
   void deleteData(int i){
     Main.listModel.removeAt(i);
+  }
+}
+
+class NoData extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    return Center(
+      child: Text("No Data"),      
+    );
   }
 }
