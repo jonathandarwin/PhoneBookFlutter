@@ -5,7 +5,7 @@ void main() => runApp(Main());
 
 class Main extends StatelessWidget{
 
-  static List<model> listModel = new List();
+  static List<Model> listModel = new List();
 
   @override
   Widget build(BuildContext context){            
@@ -148,17 +148,18 @@ class ButtonSave extends StatelessWidget{
     else{            
       bool isValid = true;
       for (int i=0; i<Main.listModel.length; i++){
-        model element = Main.listModel[i];
-        if(element.getName() == name && element.getPhone() == phone){
+        Model element = Main.listModel[i];
+        if(element.name == name && element.phone == phone){
           isValid = false;
           break;
         }
       }
 
       if(isValid){
-        Main.listModel.add(model()
-          .setName(name)
-          .setPhone(phone));    
+        Model model = Model();
+        model.name = name;
+        model.phone = phone;
+        Main.listModel.add(model);    
         state.updateState();            
 
         TextFieldPhoneState.phoneController.clear();
@@ -236,13 +237,13 @@ class ListViewPhoneState extends State<ListViewPhone>{
               children: <Widget>[
                 Expanded(
                   flex: 2,
-                  child: Text(Main.listModel[i].getName()),
+                  child: Text(Main.listModel[i].name),
                 ),
                 Expanded(                
                   flex: 2,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text(Main.listModel[i].getPhone()),
+                    child: Text(Main.listModel[i].phone),
                   )
                 ),
                 Expanded(
@@ -268,7 +269,7 @@ class ListViewPhoneState extends State<ListViewPhone>{
       context: context,
       child: AlertDialog(
         title: Text("Delete"),
-        content: Text("Are you sure want to delete '" + Main.listModel[i].getName() + "'?" ),
+        content: Text("Are you sure want to delete '" + Main.listModel[i].name + "'?" ),
         actions: <Widget>[
           FlatButton(
             child: Text("Yes"),
